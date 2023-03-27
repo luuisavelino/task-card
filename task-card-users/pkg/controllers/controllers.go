@@ -96,6 +96,8 @@ func CreateUser(c *gin.Context) {
 				return
 			}
 			user.RoleId = roleId
+		case "email":
+			user.Email = value[0]
 		}
 	}
 
@@ -146,6 +148,8 @@ func UpdateUser(c *gin.Context) {
 				return
 			}
 			user.RoleId = roleId
+		case "email":
+			user.Email = value[0]
 		}
 	}
 

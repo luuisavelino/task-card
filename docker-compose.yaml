@@ -1,5 +1,13 @@
 version: '3'
 services:
+  goapp:
+    build: .
+    volumes:
+      - .:/go/app
+    platform: linux/amd64
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+
   mysql:
     image: mysql:5.7
     container_name: mysql-container
@@ -14,5 +22,25 @@ services:
     volumes:
       - "./database/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql"
       - "mysql-db:/var/lib/mysql"
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 volumes:
   mysql-db:

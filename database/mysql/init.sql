@@ -13,6 +13,7 @@ CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(50) NOT NULL,
   userpass VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
   role_id INT NOT NULL,
   FOREIGN KEY (role_id) REFERENCES roles(id) 
 );
@@ -31,4 +32,10 @@ INSERT INTO roles (role_) VALUES ('technician');
 INSERT INTO roles (role_) VALUES ('manager');
 
 
-insert into cards(title, summary, due_date, card_status, user_id) values("teste", "teste", "01/02", ?, ?)
+
+
+select roles.role_ from users join roles on roles.id = users.role_id where users.id = 
+
+
+
+select users.username, users.email from roles join users on users.role_id = roles.id  where roles.role_ = "manager";

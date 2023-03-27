@@ -11,6 +11,7 @@ type User struct {
 	Id       int    `json:"id"`
 	Username string `json:"username" binding:"required"`
 	Userpass string `json:"userpass" binding:"required"`
+	Email    string `json:"email" binding:"required"`
 	RoleId   int    `json:"role_id"`
 }
 
@@ -28,9 +29,9 @@ func GetAllUsers() ([]User, error) {
 
 	for selectAllUsers.Next() {
 		var id, roleId int
-		var username, userpass string
+		var username, userpass, email string
 
-		err = selectAllUsers.Scan(&id, &username, &userpass, &roleId)
+		err = selectAllUsers.Scan(&id, &username, &userpass, &email, &roleId)
 		if err != nil {
 			return nil, errors.New("error returning values")
 		}
@@ -38,6 +39,7 @@ func GetAllUsers() ([]User, error) {
 		u.Id = id
 		u.Username = username
 		u.Userpass = userpass
+		u.Email = email
 		u.RoleId = roleId
 
 		users = append(users, u)
@@ -60,9 +62,9 @@ func GetUser(id int) (User, error) {
 	user := User{}
 	for selectUser.Next() {
 		var id, roleId int
-		var username, userpass string
+		var username, userpass, email string
 
-		err = selectUser.Scan(&id, &username, &userpass, &roleId)
+		err = selectUser.Scan(&id, &username, &userpass, &email, &roleId)
 		if err != nil {
 			log.Println(err)
 			return User{}, errors.New("error returning values")
@@ -71,6 +73,7 @@ func GetUser(id int) (User, error) {
 		user.Id = id
 		user.Username = username
 		user.Userpass = userpass
+		user.Email = email
 		user.RoleId = roleId
 	}
 
@@ -81,13 +84,13 @@ func GetUser(id int) (User, error) {
 func CreateNewUser(user User) error {
 	db := database.ConnectsWithDatabase()
 
-	insertUserIntoDatabase, err := db.Prepare("insert into users(username, userpass, role_id) values(?, ?, ?)")
+	insertUserIntoDatabase, err := db.Prepare("insert into users(username, userpass, email, role_id) values(?, ?, ?, ?)")
 	if err != nil {
 		log.Println(err)
 		return errors.New("error returning values")
 	}
 
-	insertUserIntoDatabase.Exec(user.Username, user.Userpass, user.RoleId)
+	insertUserIntoDatabase.Exec(user.Username, user.Userpass, user.Email, user.RoleId)
 	defer db.Close()
 	return nil
 }
@@ -109,13 +112,13 @@ func DeleteUser(id int) error {
 func UpdateUser(user User) error {
 	db := database.ConnectsWithDatabase()
 
-	updateUser, err := db.Prepare("Update users set username=?, userpass=?, role_id=? where id=?")
+	updateUser, err := db.Prepare("Update users set username=?, userpass=?, email=?, role_id=? where id=?")
 	if err != nil {
 		log.Println(err)
 		return errors.New("error returning values")
 	}
 
-	updateUser.Exec(user.Username, user.Userpass, user.RoleId, user.Id)
+	updateUser.Exec(user.Username, user.Userpass, user.Email, user.RoleId, user.Id)
 	defer db.Close()
 	return nil
 }
