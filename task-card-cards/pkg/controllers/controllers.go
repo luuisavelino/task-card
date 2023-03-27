@@ -8,18 +8,27 @@ import (
 	"github.com/luuisavelino/task-card-cards/pkg/models"
 )
 
+const (
+	invalidId = "invalid id"
+	invalidUserId = "invalid user id"
+)
+
 type requestReturn struct {
 	Status  string `json:"status"`
 	Message string `json:"message"`
 }
 
 func Cards(c *gin.Context) {
+	c.Request.ParseMultipartForm(1000)
+	userId, err := strconv.Atoi(c.Request.PostForm["user_id"][0])
+	if err != nil {
+		c.JSON(http.StatusBadRequest, requestReturn{
+			"error", invalidUserId,
+		})
+		return
+	}
 
-	//TODO: Pegar body com as infos:
-	// Card ID
-	// Card role
-
-	cards, err := models.GetCards()
+	cards, err := models.GetCards(userId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, requestReturn{
 			"error", err.Error(),
@@ -34,7 +43,7 @@ func Card(c *gin.Context) {
 	id, err := strconv.Atoi(c.Params.ByName("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, requestReturn{
-			"error", "invalid id",
+			"error", invalidId,
 		})
 		return
 	}
@@ -54,7 +63,7 @@ func DeleteCard(c *gin.Context) {
 	id, err := strconv.Atoi(c.Params.ByName("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, requestReturn{
-			"error", "invalid id",
+			"error", invalidId,
 		})
 		return
 	}
@@ -63,12 +72,12 @@ func DeleteCard(c *gin.Context) {
 	userId, err := strconv.Atoi(c.Request.PostForm["user_id"][0])
 	if err != nil {
 		c.JSON(http.StatusBadRequest, requestReturn{
-			"error", "invalid user id",
+			"error", invalidUserId,
 		})
 		return
 	}
 
-	if err = models.DeleteCard(id,userId); err != nil {
+	if err = models.DeleteCard(id, userId); err != nil {
 		c.JSON(http.StatusBadRequest, requestReturn{
 			"error", err.Error(),
 		})
@@ -98,7 +107,7 @@ func CreateCard(c *gin.Context) {
 			userId, err := strconv.Atoi(value[0])
 			if err != nil {
 				c.JSON(http.StatusBadRequest, requestReturn{
-					"error", "invalid user id",
+					"error", invalidUserId,
 				})
 				return
 			}
@@ -122,7 +131,7 @@ func UpdateCard(c *gin.Context) {
 	id, err := strconv.Atoi(c.Params.ByName("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, requestReturn{
-			"error", "invalid id",
+			"error", invalidId,
 		})
 		return
 	}
