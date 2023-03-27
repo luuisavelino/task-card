@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: task-card-cards-cfg
+  namespace: task-card
+data:
+  DB_USER: "user"
+  DB_PASSWORD: "password"
+  DB_HOST: "192.168.0.113"
+  DB_PORT: "3306"
+  DB_DATABASE: "task_cards"
+
+
+
+  export DB_USER="user"
+  export DB_PASSWORD="password"
+  export DB_HOST="192.168.0.113"
+  export DB_PORT="3306"
+  export DB_DATABASE="task_cards"
