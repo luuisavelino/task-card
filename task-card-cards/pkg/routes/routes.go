@@ -16,6 +16,7 @@ func HandlerRequest() {
 	router.POST(apiVersion+"/cards", controllers.CreateCard)
 	router.PATCH(apiVersion+"/cards/:id", controllers.UpdateCard)
 	router.DELETE(apiVersion+"/cards/:id", controllers.DeleteCard)
+	router.POST(apiVersion+"/cards/:id", controllers.MoveCard)
 
 	router.Run(":8080")
 }

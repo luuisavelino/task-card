@@ -12,8 +12,8 @@ spec:
     metadata:
       labels:
         app: task-card-cards
-        #tier: backend
-        #service: users
+        tier: backend
+        service: users
     spec:
       containers:
       - name: task-card-cards-container

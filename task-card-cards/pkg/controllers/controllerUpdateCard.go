@@ -43,11 +43,36 @@ func UpdateCard(c *gin.Context) {
 	}
 
 	card.Id = id
-	models.UpdateCard(card)
-
-	models.SendNotification(card, "update")
-
+	models.UpdateCardInfo(card)
 	c.JSON(http.StatusOK, requestReturn{
 		"success", "card updated",
+	})
+}
+
+func MoveCard(c *gin.Context) {
+	id, err := strconv.Atoi(c.Params.ByName("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, requestReturn{
+			"error", invalidId,
+		})
+		return
+	}
+
+	var card models.Card
+	c.Request.ParseMultipartForm(1000)
+	for key, value := range c.Request.PostForm {
+		switch key {
+		case "card_status":
+			card.CardStatus = value[0]
+		}
+	}
+
+	card.Id = id
+
+	models.UpdateCardStatus(card)
+	models.SendNotification(id, "update")
+
+	c.JSON(http.StatusOK, requestReturn{
+		"success", "card moved to" + card.CardStatus,
 	})
 }

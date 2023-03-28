@@ -15,16 +15,21 @@ import (
 var server = os.Getenv("server")
 
 type CardNotification struct {
-	Id            int    `json:"id"`
-	Title         string `json:"title"`
-	CardStatus    string `json:"card_status"`
-	Username      string `json:"username"`
+	Id            int               `json:"id"`
+	Title         string            `json:"title"`
+	CardStatus    string            `json:"card_status"`
+	Username      string            `json:"username"`
 	ManagersEmail map[string]string `json:"manager_email"`
 }
 
-func SendNotification(card Card, event string) {
+func SendNotification(id int, event string) {
+	card, err := GetCard(id)
+	if err != nil {
+		log.Fatalln("error getting card information")
+		return
+	}
+	
 	var cardNotification CardNotification
-
 	cardNotification.Infos(card)
 
 	switch event {
@@ -56,6 +61,8 @@ func (c *CardNotification) Infos(card Card) {
 	}
 	c.ManagersEmail = managerEmail
 }
+
+
 
 func getManagersEmail() (map[string]string, error) {
 	db := database.ConnectsWithDatabase()

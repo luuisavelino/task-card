@@ -7,16 +7,30 @@ import (
 	"github.com/luuisavelino/task-card-cards/pkg/database"
 )
 
-func UpdateCard(card Card) error {
+func UpdateCardInfo(card Card) error {
 	db := database.ConnectsWithDatabase()
 
-	updateCard, err := db.Prepare("Update cards set title=?, summary=?, card_status=?, due_date=? where id=?")
+	updateCard, err := db.Prepare("Update cards set title=?, summary=?, due_date=? where id=?")
 	if err != nil {
 		log.Println(err)
 		return errors.New(genericErrToUser)
 	}
 
-	updateCard.Exec(card.Title, card.Summary, card.CardStatus, card.DueDate, card.Id)
+	updateCard.Exec(card.Title, card.Summary, card.DueDate, card.Id)
+	defer db.Close()
+	return nil
+}
+
+func UpdateCardStatus(card Card) error {
+	db := database.ConnectsWithDatabase()
+
+	updateCard, err := db.Prepare("Update cards set card_status=? where id=?")
+	if err != nil {
+		log.Println(err)
+		return errors.New(genericErrToUser)
+	}
+
+	updateCard.Exec(card.CardStatus, card.Id)
 	defer db.Close()
 	return nil
 }

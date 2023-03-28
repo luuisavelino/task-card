@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-dp
+  namespace: kafka
+spec:
+  selector:
+    matchLabels:
+      app: kafka
+  revisionHistoryLimit: 0
+  template:
+    metadata:
+      labels:
+        app: kafka
+        tier: infra
+    spec:
+      containers:
+      - name: kafka-container
+        image: confluentinc/cp-kafka:latest
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: kafka-cfg
