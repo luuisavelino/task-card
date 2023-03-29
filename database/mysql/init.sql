@@ -24,18 +24,9 @@ CREATE TABLE cards (
   summary VARCHAR(2500),
   due_date VARCHAR(10),
   card_status ENUM('to do', 'in progress', 'done') NOT NULL DEFAULT 'to do',
-  user_id INT,
+  user_id INT NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 INSERT INTO roles (role_) VALUES ('technician');
 INSERT INTO roles (role_) VALUES ('manager');
-
-
-
-
-select roles.role_ from users join roles on roles.id = users.role_id where users.id = 
-
-
-
-select users.username, users.email from roles join users on users.role_id = roles.id  where roles.role_ = "manager";

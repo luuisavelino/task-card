@@ -24,10 +24,14 @@ Website do sistema de task-card
 
 
 ## Falta implementar:
+* Criar webpage
+* Criar ambiente k8s
+
+
+* Criar testes unitário
 * Adicionar bidings nas structs
 * Adicionar validações
-* Criar testes unitário
-* Criar ambiente k8s
+
 
 
 

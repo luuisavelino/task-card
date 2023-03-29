@@ -1,0 +1,231 @@
+definitions:
+  globals.BaseRequestReturn:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  models.Card:
+    properties:
+      card_status:
+        type: string
+      due_date:
+        type: string
+      id:
+        type: integer
+      summary:
+        maxLength: 2500
+        type: string
+      title:
+        type: string
+      user_id:
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /cards:
+    get:
+      consumes:
+      - application/json
+      description: Get all cards
+      parameters:
+      - description: User id of the card
+        in: formData
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Card'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/globals.BaseRequestReturn'
+      summary: Get all cards
+      tags:
+      - cards
+    post:
+      consumes:
+      - application/json
+      description: Route to update a card
+      parameters:
+      - description: Title of the card
+        in: formData
+        name: title
+        required: true
+        type: string
+      - description: Summary of the card
+        in: formData
+        name: summary
+        required: true
+        type: string
+      - description: Due date of the card
+        in: formData
+        name: due_date
+        required: true
+        type: string
+      - description: Status of the card
+        in: formData
+        name: card_status
+        required: true
+        type: string
+      - description: User id of the card
+        in: formData
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/globals.BaseRequestReturn'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/globals.BaseRequestReturn'
+      summary: Create a card
+      tags:
+      - cards
+  /cards/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a card
+      parameters:
+      - description: Card id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User id of the card
+        in: formData
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/globals.BaseRequestReturn'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/globals.BaseRequestReturn'
+      summary: Delete a card
+      tags:
+      - cards
+    get:
+      consumes:
+      - application/json
+      description: Get a card
+      parameters:
+      - description: Card id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Card'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/globals.BaseRequestReturn'
+      summary: Get a card
+      tags:
+      - cards
+    patch:
+      consumes:
+      - application/json
+      description: Update a card
+      parameters:
+      - description: Card id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Title of the card
+        in: formData
+        name: title
+        required: true
+        type: string
+      - description: Summary of the card
+        in: formData
+        name: summary
+        required: true
+        type: string
+      - description: Due date of the card
+        in: formData
+        name: due_date
+        required: true
+        type: string
+      - description: Status of the card
+        in: formData
+        name: card_status
+        required: true
+        type: string
+      - description: User id of the card
+        in: formData
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/globals.BaseRequestReturn'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/globals.BaseRequestReturn'
+      summary: Update a card
+      tags:
+      - cards
+    post:
+      consumes:
+      - application/json
+      description: Move a card
+      parameters:
+      - description: Card id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Status of the card
+        in: formData
+        name: card_status
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/globals.BaseRequestReturn'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/globals.BaseRequestReturn'
+      summary: Move a card
+      tags:
+      - cards
+swagger: "2.0"

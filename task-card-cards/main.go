@@ -1,11 +1,18 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
+	"github.com/gin-gonic/gin"
 	"github.com/luuisavelino/task-card-cards/pkg/routes"
 )
 
 func main() {
-	routes.HandlerRequest()
+	router := gin.Default()
+
+	routes.InitRoutes(&router.RouterGroup)
+
+	if err := router.Run(":8080"); err != nil {
+		log.Fatal(err)
+	}
 }

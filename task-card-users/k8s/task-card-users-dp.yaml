@@ -3,24 +3,38 @@ kind: Deployment
 metadata:
   name: task-card-users-dp
   namespace: task-card
+  labels:
+    app: task-card-users
+    version: v1
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: task-card-users
-  revisionHistoryLimit: 0
+      version: v1
   template:
     metadata:
       labels:
         app: task-card-users
-        #tier: backend
-        #service: users
+        version: v1
     spec:
+      serviceAccountName: task-card-task-card-users
       containers:
-      - name: task-card-users-container
-        image: luisavelino/task-card-users:1.0
-        imagePullPolicy: Always
+      - name: task-card-users
+        image: luisavelino/task-card-users:2.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        securityContext:
+          runAsUser: 1000
         envFrom:
         #- secretRef:
         #    name: task-card-users-sec
         - configMapRef:
             name: task-card-users-cfg
+      volumes:
+      - name: tmp
+        emptyDir: {}
