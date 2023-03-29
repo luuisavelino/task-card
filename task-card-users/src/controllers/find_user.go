@@ -13,14 +13,15 @@ import (
 
 // @BasePath /api/v1
 
-// Users godoc
+// FindUsers godoc
 // @Summary Get all users
 // @Description Route to get all users
 // @Tags users
 // @Accept json
 // @Produce json
-// @Success 200 {object} []models.User
-// @Failure 400 {object} globals.BaseRequestReturn
+// @Success 200 {object} []response.UserResponse
+// @Failure 400 {object} rest_err.RestErr
+// @Failure 500 {object} rest_err.RestErr
 // @Router /users [get]
 func (uc *userControllerInterface) FindUsers(c *gin.Context) {
 	logger.Info("Init FindUsers controller",
@@ -43,15 +44,16 @@ func (uc *userControllerInterface) FindUsers(c *gin.Context) {
 
 // @BasePath /api/v1
 
-// User godoc
+// FindUserById godoc
 // @Summary Get a user
 // @Description Route to get a user
 // @Tags users
 // @Accept json
 // @Produce json
 // @Param id path int true "User id"
-// @Success 200 {object} models.User
-// @Failure 400 {object} globals.BaseRequestReturn
+// @Success 200 {object} response.UserResponse
+// @Failure 400 {object} rest_err.RestErr
+// @Failure 500 {object} rest_err.RestErr
 // @Router /users/{id} [get]
 func (uc *userControllerInterface) FindUserById(c *gin.Context) {
 	logger.Info("Init FindUserById controller",

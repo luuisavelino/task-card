@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kafka-dp
+  name: task-card-notification-dp
   namespace: task-card
   labels:
-    app: kafka
+    app: task-card-notification
     version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: kafka
+      app: task-card-notification
       version: v1
   template:
     metadata:
       labels:
-        app: kafka
+        app: task-card-notification
         version: v1
     spec:
-      serviceAccountName: task-card-kafka
+      serviceAccountName: task-card-task-card-notification
       containers:
-      - name: kafka
-        image: confluentinc/cp-kafka:latest
+      - name: task-card-notification
+        image: luisavelino/task-card-notification:1.0
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
@@ -32,9 +32,9 @@ spec:
           runAsUser: 1000
         envFrom:
         #- secretRef:
-        #    name: kafka-sec
+        #    name: task-card-notification-sec
         - configMapRef:
-            name: kafka-cfg
+            name: task-card-notification-cfg
       volumes:
       - name: tmp
         emptyDir: {}

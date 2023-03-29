@@ -35,14 +35,20 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.User"
+                                "$ref": "#/definitions/response.UserResponse"
                             }
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/globals.BaseRequestReturn"
+                            "$ref": "#/definitions/rest_err.RestErr"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/rest_err.RestErr"
                         }
                     }
                 }
@@ -61,45 +67,32 @@ const docTemplate = `{
                 "summary": "Create new user",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Username",
-                        "name": "username",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Userpass",
-                        "name": "userpass",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Email",
-                        "name": "email",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Role Id",
-                        "name": "role_id",
-                        "in": "formData",
-                        "required": true
+                        "description": "User info",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UserRequest"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/globals.BaseRequestReturn"
+                            "$ref": "#/definitions/rest_success.BaseRequestReturn"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/globals.BaseRequestReturn"
+                            "$ref": "#/definitions/rest_err.RestErr"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/rest_err.RestErr"
                         }
                     }
                 }
@@ -121,7 +114,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "User Id",
+                        "description": "User id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -131,13 +124,70 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/response.UserResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/globals.BaseRequestReturn"
+                            "$ref": "#/definitions/rest_err.RestErr"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/rest_err.RestErr"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Route to update a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Update a user",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "User info",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/rest_success.BaseRequestReturn"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/rest_err.RestErr"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/rest_err.RestErr"
                         }
                     }
                 }
@@ -157,7 +207,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "User Id",
+                        "description": "User id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -167,77 +217,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/globals.BaseRequestReturn"
+                            "$ref": "#/definitions/rest_success.BaseRequestReturn"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/globals.BaseRequestReturn"
-                        }
-                    }
-                }
-            },
-            "patch": {
-                "description": "Route to update a user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "Update a user",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "User Id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "User Name",
-                        "name": "username",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "User Password",
-                        "name": "userpass",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "User Email",
-                        "name": "email",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Role Id",
-                        "name": "role_id",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/globals.BaseRequestReturn"
+                            "$ref": "#/definitions/rest_err.RestErr"
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/globals.BaseRequestReturn"
+                            "$ref": "#/definitions/rest_err.RestErr"
                         }
                     }
                 }
@@ -245,18 +237,35 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "globals.BaseRequestReturn": {
+        "request.UserRequest": {
             "type": "object",
+            "required": [
+                "email",
+                "role_id",
+                "username",
+                "userpass"
+            ],
             "properties": {
-                "message": {
+                "email": {
                     "type": "string"
                 },
-                "status": {
-                    "type": "string"
+                "role_id": {
+                    "type": "integer",
+                    "maximum": 2,
+                    "minimum": 1
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 40,
+                    "minLength": 4
+                },
+                "userpass": {
+                    "type": "string",
+                    "minLength": 6
                 }
             }
         },
-        "models.User": {
+        "response.UserResponse": {
             "type": "object",
             "properties": {
                 "email": {
@@ -269,11 +278,48 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "username": {
-                    "type": "string",
-                    "maxLength": 40,
-                    "minLength": 3
+                    "type": "string"
+                }
+            }
+        },
+        "rest_err.Causes": {
+            "type": "object",
+            "properties": {
+                "field": {
+                    "type": "string"
                 },
-                "userpass": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "rest_err.RestErr": {
+            "type": "object",
+            "properties": {
+                "causes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/rest_err.Causes"
+                    }
+                },
+                "code": {
+                    "type": "integer"
+                },
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "rest_success.BaseRequestReturn": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status": {
                     "type": "string"
                 }
             }

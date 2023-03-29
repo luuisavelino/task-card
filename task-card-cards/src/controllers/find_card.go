@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/luuisavelino/task-card-cards/src/configuration/logger"
+	_ "github.com/luuisavelino/task-card-cards/src/configuration/rest_err"
 	"github.com/luuisavelino/task-card-cards/src/configuration/validation"
 	"github.com/luuisavelino/task-card-cards/src/controllers/model/request"
 	"github.com/luuisavelino/task-card-cards/src/models"
@@ -15,15 +16,15 @@ import (
 
 // @BasePath /api/v1
 
-// Cards godoc
+// FindCards godoc
 // @Summary Get all cards
 // @Description Get all cards
 // @Tags cards
 // @Accept  json
 // @Produce  json
-// @Param user_id formData string true "User id of the card"
-// @Success 200 {object} []models.Card
-// @Failure 400 {object} rest_success.BaseRequestReturn
+// @Param action body request.ActionRequest true "Action info"
+// @Success 200 {object} []response.CardResponse
+// @Failure 400 {object} rest_err.RestErr
 // @Router /cards [get]
 func (cc *cardControllerInterface) FindCards(c *gin.Context) {
 	logger.Info("Init FindCards controller",
@@ -59,15 +60,16 @@ func (cc *cardControllerInterface) FindCards(c *gin.Context) {
 
 // @BasePath /api/v1
 
-// Card godoc
+// FindCardById godoc
 // @Summary Get a card
 // @Description Get a card
 // @Tags cards
 // @Accept  json
 // @Produce  json
 // @Param id path int true "Card id"
-// @Success 200 {object} models.Card
-// @Failure 400 {object} rest_success.BaseRequestReturn
+// @Param action body request.ActionRequest true "Action info"
+// @Success 200 {object} []response.CardResponse
+// @Failure 400 {object} rest_err.RestErr
 // @Router /cards/{id} [get]
 func (cc *cardControllerInterface) FindCardById(c *gin.Context) {
 	logger.Info("Init FindCardById controller",

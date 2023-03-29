@@ -7,6 +7,7 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/luuisavelino/task-card-cards/src/configuration/logger"
+	_ "github.com/luuisavelino/task-card-cards/src/configuration/rest_err"
 	"github.com/luuisavelino/task-card-cards/src/configuration/rest_success"
 	"github.com/luuisavelino/task-card-cards/src/configuration/validation"
 	"github.com/luuisavelino/task-card-cards/src/controllers/model/request"
@@ -21,13 +22,10 @@ import (
 // @Tags cards
 // @Accept  json
 // @Produce  json
-// @Param title formData string true "Title of the card"
-// @Param summary formData string true "Summary of the card"
-// @Param due_date formData string true "Due date of the card"
-// @Param card_status formData string true "Status of the card"
-// @Param user_id formData string true "User id of the card"
-// @Success 200 {object} globals.BaseRequestReturn
-// @Failure 400 {object} globals.BaseRequestReturn
+// @Param card body request.CardRequest true "Card info"
+// @Success 200 {object} rest_success.BaseRequestReturn
+// @Failure 400 {object} rest_err.RestErr
+// @Failure 500 {object} rest_err.RestErr
 // @Router /cards [post]
 func (cc *cardControllerInterface) CreateCard(c *gin.Context) {
 	logger.Info("Init CreateCard controller",

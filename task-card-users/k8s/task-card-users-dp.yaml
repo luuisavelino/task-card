@@ -21,7 +21,7 @@ spec:
       serviceAccountName: task-card-task-card-users
       containers:
       - name: task-card-users
-        image: luisavelino/task-card-users:2.0
+        image: luisavelino/task-card-users:3.0
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080

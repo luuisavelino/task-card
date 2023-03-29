@@ -24,7 +24,8 @@ import (
 // @Param id path int true "User id"
 // @Param user body request.UserRequest true "User info"
 // @Success 200 {object} rest_success.BaseRequestReturn
-// @Failure 400 {object} rest_success.BaseRequestReturn
+// @Failure 400 {object} rest_err.RestErr
+// @Failure 500 {object} rest_err.RestErr
 // @Router /users/{id} [put]
 func (uc *userControllerInterface) UpdateUser(c *gin.Context) {
 	logger.Info("Init UpdateUser controller",

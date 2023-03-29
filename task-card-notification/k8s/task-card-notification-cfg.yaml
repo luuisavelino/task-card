@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: task-card-notification-cfg
+  namespace: task-card
+data:
+  server: "kafka:29092"
+  topicConsume: "update"
+  groupId: "myGroup"
+  autoOffSetReset: "earliest"
+  serviceAccount: "notification@taskcard.com"

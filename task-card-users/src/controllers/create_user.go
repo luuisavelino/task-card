@@ -22,12 +22,12 @@ var (
 // @Summary 	Create new user
 // @Description Route to create a new user
 // @Tags 		users
-// @Accept 		json
-// @Produce 	json
-// @Param 		user body request.UserRequest true "User info"
-// @Success 200 {object} globals.BaseRequestReturn
-// @Failure 400 {object} globals.BaseRequestReturn
-// @Failure 500 {object} globals.BaseRequestReturn
+// @Accept  json
+// @Produce  json
+// @Param user body request.UserRequest true "User info"
+// @Success 200 {object} rest_success.BaseRequestReturn
+// @Failure 400 {object} rest_err.RestErr
+// @Failure 500 {object} rest_err.RestErr
 // @Router /users [post]
 func (uc *userControllerInterface) CreateUser(c *gin.Context) {
 	logger.Info("Init CreateUser controller",

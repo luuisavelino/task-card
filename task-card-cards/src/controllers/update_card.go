@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/luuisavelino/task-card-cards/src/configuration/logger"
+	_ "github.com/luuisavelino/task-card-cards/src/configuration/rest_err"
 	"github.com/luuisavelino/task-card-cards/src/configuration/rest_success"
 	"github.com/luuisavelino/task-card-cards/src/configuration/validation"
 	"github.com/luuisavelino/task-card-cards/src/controllers/model/request"
@@ -22,14 +23,11 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param id path int true "Card id"
-// @Param title formData string true "Title of the card"
-// @Param summary formData string true "Summary of the card"
-// @Param due_date formData string true "Due date of the card"
-// @Param card_status formData string true "Status of the card"
-// @Param user_id formData string true "User id of the card"
+// @Param card body request.CardRequest true "Card info"
 // @Success 200 {object} rest_success.BaseRequestReturn
-// @Failure 400 {object} rest_success.BaseRequestReturn
-// @Router /cards/{id} [patch]
+// @Failure 400 {object} rest_err.RestErr
+// @Failure 500 {object} rest_err.RestErr
+// @Router /cards/{id} [put]
 func (cc *cardControllerInterface) UpdateCard(c *gin.Context) {
 	logger.Info("Init UpdateCard controller",
 		zap.String("journey", "updateCard"),

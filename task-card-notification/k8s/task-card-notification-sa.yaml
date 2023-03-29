@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: task-card-task-card-notification
+  namespace: task-card
+  labels:
+    account: task-card-notification

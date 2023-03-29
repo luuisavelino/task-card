@@ -31,11 +31,13 @@ const docTemplate = `{
                 "summary": "Get all cards",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "User id of the card",
-                        "name": "user_id",
-                        "in": "formData",
-                        "required": true
+                        "description": "Action info",
+                        "name": "action",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ActionRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -44,14 +46,14 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Card"
+                                "$ref": "#/definitions/response.CardResponse"
                             }
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/globals.BaseRequestReturn"
+                            "$ref": "#/definitions/rest_err.RestErr"
                         }
                     }
                 }
@@ -70,52 +72,32 @@ const docTemplate = `{
                 "summary": "Create a card",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Title of the card",
-                        "name": "title",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Summary of the card",
-                        "name": "summary",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Due date of the card",
-                        "name": "due_date",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Status of the card",
-                        "name": "card_status",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "User id of the card",
-                        "name": "user_id",
-                        "in": "formData",
-                        "required": true
+                        "description": "Card info",
+                        "name": "card",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CardRequest"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/globals.BaseRequestReturn"
+                            "$ref": "#/definitions/rest_success.BaseRequestReturn"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/globals.BaseRequestReturn"
+                            "$ref": "#/definitions/rest_err.RestErr"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/rest_err.RestErr"
                         }
                     }
                 }
@@ -141,19 +123,82 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "Action info",
+                        "name": "action",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ActionRequest"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Card"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.CardResponse"
+                            }
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/globals.BaseRequestReturn"
+                            "$ref": "#/definitions/rest_err.RestErr"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update a card",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cards"
+                ],
+                "summary": "Update a card",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Card id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Card info",
+                        "name": "card",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CardRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/rest_success.BaseRequestReturn"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/rest_err.RestErr"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/rest_err.RestErr"
                         }
                     }
                 }
@@ -179,24 +224,32 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "description": "Status of the card",
-                        "name": "card_status",
-                        "in": "formData",
-                        "required": true
+                        "description": "Action info",
+                        "name": "action",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ActionRequest"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/globals.BaseRequestReturn"
+                            "$ref": "#/definitions/rest_success.BaseRequestReturn"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/globals.BaseRequestReturn"
+                            "$ref": "#/definitions/rest_err.RestErr"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/rest_err.RestErr"
                         }
                     }
                 }
@@ -222,95 +275,32 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "description": "User id of the card",
-                        "name": "user_id",
-                        "in": "formData",
-                        "required": true
+                        "description": "Action info",
+                        "name": "action",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ActionRequest"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/globals.BaseRequestReturn"
+                            "$ref": "#/definitions/rest_success.BaseRequestReturn"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/globals.BaseRequestReturn"
-                        }
-                    }
-                }
-            },
-            "patch": {
-                "description": "Update a card",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "cards"
-                ],
-                "summary": "Update a card",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Card id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Title of the card",
-                        "name": "title",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Summary of the card",
-                        "name": "summary",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Due date of the card",
-                        "name": "due_date",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Status of the card",
-                        "name": "card_status",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "User id of the card",
-                        "name": "user_id",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/globals.BaseRequestReturn"
+                            "$ref": "#/definitions/rest_err.RestErr"
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/globals.BaseRequestReturn"
+                            "$ref": "#/definitions/rest_err.RestErr"
                         }
                     }
                 }
@@ -318,18 +308,45 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "globals.BaseRequestReturn": {
+        "request.ActionRequest": {
             "type": "object",
+            "required": [
+                "user_id"
+            ],
             "properties": {
-                "message": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
+                "user_id": {
+                    "type": "integer"
                 }
             }
         },
-        "models.Card": {
+        "request.CardRequest": {
+            "type": "object",
+            "required": [
+                "card_status",
+                "summary",
+                "title",
+                "user_id"
+            ],
+            "properties": {
+                "card_status": {
+                    "type": "string"
+                },
+                "due_date": {
+                    "type": "string"
+                },
+                "summary": {
+                    "type": "string",
+                    "maxLength": 2500
+                },
+                "title": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "response.CardResponse": {
             "type": "object",
             "properties": {
                 "card_status": {
@@ -342,14 +359,55 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "summary": {
-                    "type": "string",
-                    "maxLength": 2500
+                    "type": "string"
                 },
                 "title": {
                     "type": "string"
                 },
                 "user_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "rest_err.Causes": {
+            "type": "object",
+            "properties": {
+                "field": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "rest_err.RestErr": {
+            "type": "object",
+            "properties": {
+                "causes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/rest_err.Causes"
+                    }
+                },
+                "code": {
+                    "type": "integer"
+                },
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "rest_success.BaseRequestReturn": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
                 }
             }
         }

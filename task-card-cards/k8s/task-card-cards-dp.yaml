@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kafka-dp
+  name: task-card-cards-dp
   namespace: task-card
   labels:
-    app: kafka
+    app: task-card-cards
     version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: kafka
+      app: task-card-cards
       version: v1
   template:
     metadata:
       labels:
-        app: kafka
+        app: task-card-cards
         version: v1
     spec:
-      serviceAccountName: task-card-kafka
+      serviceAccountName: task-card-task-card-cards
       containers:
-      - name: kafka
-        image: confluentinc/cp-kafka:latest
+      - name: task-card-cards
+        image: luisavelino/task-card-cards:1.0
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
@@ -32,9 +32,9 @@ spec:
           runAsUser: 1000
         envFrom:
         #- secretRef:
-        #    name: kafka-sec
+        #    name: task-card-cards-sec
         - configMapRef:
-            name: kafka-cfg
+            name: task-card-cards-cfg
       volumes:
       - name: tmp
         emptyDir: {}

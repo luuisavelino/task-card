@@ -20,8 +20,9 @@ import (
 // @Accept json
 // @Produce json
 // @Param id path int true "User id"
-// @Success 200 {object} globals.BaseRequestReturn
-// @Failure 400 {object} globals.BaseRequestReturn
+// @Success 200 {object} rest_success.BaseRequestReturn
+// @Failure 400 {object} rest_err.RestErr
+// @Failure 500 {object} rest_err.RestErr
 // @Router /users/{id} [delete]
 func (uc *userControllerInterface) DeleteUser(c *gin.Context) {
 	logger.Info("Init DeleteUser controller",

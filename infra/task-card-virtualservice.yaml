@@ -27,6 +27,14 @@ spec:
   http:
   - match:
     - uri:
+        prefix: /api/v1/cards
+    route:
+    - destination:
+        host: task-card-cards
+        port:
+          number: 8080
+  - match:
+    - uri:
         prefix: /api/v1/users
     route:
     - destination:

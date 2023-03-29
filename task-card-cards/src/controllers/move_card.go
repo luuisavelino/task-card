@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/luuisavelino/task-card-cards/src/configuration/logger"
+	_ "github.com/luuisavelino/task-card-cards/src/configuration/rest_err"
 	"github.com/luuisavelino/task-card-cards/src/configuration/rest_success"
 	"github.com/luuisavelino/task-card-cards/src/configuration/validation"
 	"github.com/luuisavelino/task-card-cards/src/controllers/model/request"
@@ -22,10 +23,11 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param id path int true "Card id"
-// @Param card_status formData string true "Status of the card"
+// @Param action body request.ActionRequest true "Action info"
 // @Success 200 {object} rest_success.BaseRequestReturn
-// @Failure 400 {object} rest_success.BaseRequestReturn
-// @Router /cards/{id} [put]
+// @Failure 400 {object} rest_err.RestErr
+// @Failure 500 {object} rest_err.RestErr
+// @Router /cards/{id} [post]
 func (cc *cardControllerInterface) MoveCard(c *gin.Context) {
 	logger.Info("Init MoveCard controller",
 		zap.String("journey", "moveCard"),
