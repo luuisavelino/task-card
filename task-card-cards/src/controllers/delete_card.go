@@ -38,7 +38,7 @@ func DeleteCard(c *gin.Context) {
 	// 	return
 	// }
 
-	// if err = models.DeleteCard(id, userId); err != nil {
+	// if err = models.DeleteCard(cardId, userId); err != nil {
 	// 	c.JSON(http.StatusBadRequest, rest_success.BaseRequestReturn{
 	// 		Status: "error", Message: err.Error(),
 	// 	})

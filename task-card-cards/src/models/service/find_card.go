@@ -1,13 +1,13 @@
 package service
 
 import (
-	"errors"
 	"fmt"
-	"log"
 
 	"github.com/luuisavelino/task-card-cards/src/configuration/database"
+	"github.com/luuisavelino/task-card-cards/src/configuration/logger"
 	"github.com/luuisavelino/task-card-cards/src/configuration/rest_err"
 	"github.com/luuisavelino/task-card-cards/src/models"
+	"go.uber.org/zap"
 )
 
 const (
@@ -23,28 +23,24 @@ type Card struct {
 	UserId     int    `json:"user_id" validate:"nonzero"`
 }
 
-func (c *cardDomainService) FindCards() (map[int]models.CardDomainInterface, *rest_err.RestErr) {
-	return nil, nil
-}
+func (c *cardDomainService) FindCards(userId int) (map[int]models.CardDomainInterface, *rest_err.RestErr) {
+	logger.Info("Init findCards model",
+		zap.String("journey", "findCards"),
+	)
 
-func (c *cardDomainService) FindCardById(cardId int) (map[int]models.CardDomainInterface, *rest_err.RestErr) {
-	return nil, nil
-}
-
-func GetCards(cardId int) ([]Card, error) {
 	db := database.ConnectsWithDatabase()
 
-	selectUserRole, err := db.Query("select roles.role_ from users join roles on roles.id = users.role_id where users.id = " + fmt.Sprint(cardId))
+	selectUserRole, err := db.Query("select roles.role_ from users join roles on roles.id = users.role_id where users.id = " + fmt.Sprint(userId))
 	if err != nil {
-		log.Println(err)
-		return nil, errors.New(genericErrToUser)
+		logger.Error("Error trying to prepare query", err)
+		return nil, rest_err.NewForbiddenError("error to find cards")
 	}
 
 	var userRole string
 	for selectUserRole.Next() {
 		if err = selectUserRole.Scan(&userRole); err != nil {
-			log.Println(err)
-			return nil, errors.New(genericErrToUser)
+			logger.Error("Error trying to scan", err)
+			return nil, rest_err.NewForbiddenError("error to find cards")
 		}
 	}
 
@@ -53,34 +49,32 @@ func GetCards(cardId int) ([]Card, error) {
 	case "manager":
 		queryToGetCards = "select * from cards"
 	case "technician":
-		queryToGetCards = "select * from cards where user_id = " + fmt.Sprint(cardId)
+		queryToGetCards = "select * from cards where user_id = " + fmt.Sprint(userId)
 	}
 
 	selectCards, err := db.Query(queryToGetCards)
 	if err != nil {
-		log.Println(err)
-		return nil, errors.New(genericErrToUser)
+		logger.Error("Error trying to prepare query", err)
+		return nil, rest_err.NewForbiddenError("Error to find cards")
 	}
 
-	c := Card{}
-	cards := []Card{}
+	cards := make(map[int]models.CardDomainInterface)
 
 	for selectCards.Next() {
-		var id, userId int
+		var cardId, userId int
 		var title, summary, cardStatus, dueDate string
-		if err = selectCards.Scan(&id, &title, &summary, &dueDate, &cardStatus, &userId); err != nil {
-			log.Println(err)
-			return nil, errors.New(genericErrToUser)
+		if err = selectCards.Scan(&cardId, &title, &summary, &dueDate, &cardStatus, &userId); err != nil {
+			logger.Error("Error trying to scan", err)
+			return nil, rest_err.NewForbiddenError("Error to find cards")
 		}
 
-		c.Id = id
-		c.Title = title
-		c.Summary = summary
-		c.CardStatus = cardStatus
-		c.DueDate = dueDate
-		c.UserId = userId
-
-		cards = append(cards, c)
+		cards[cardId] = models.NewCardDomain(
+			title,
+			summary,
+			cardStatus,
+			dueDate,
+			userId,
+		)
 	}
 
 	defer db.Close()
@@ -88,34 +82,61 @@ func GetCards(cardId int) ([]Card, error) {
 	return cards, nil
 }
 
-func GetCard(id int) (Card, error) {
+func (c *cardDomainService) FindCardById(cardId, userId int) (map[int]models.CardDomainInterface, *rest_err.RestErr) {
+	logger.Info("Init findCard model",
+		zap.String("journey", "findCard"),
+	)
+
 	db := database.ConnectsWithDatabase()
 
-	selectCard, err := db.Query("select * from cards where id=?", id)
+	selectUserRole, err := db.Query("select roles.role_ from users join roles on roles.id = users.role_id where users.id = " + fmt.Sprint(userId))
 	if err != nil {
-		log.Println(err)
-		return Card{}, errors.New(genericErrToUser)
+		logger.Error("Error trying to prepare query", err)
+		return nil, rest_err.NewForbiddenError("Error to find card")
 	}
 
-	card := Card{}
-	for selectCard.Next() {
-		var id, userId int
-		var title, summary, cardStatus, dueDate string
+	var userRole string
+	for selectUserRole.Next() {
+		if err = selectUserRole.Scan(&userRole); err != nil {
+			logger.Error("Error trying to scan", err)
+			return nil, rest_err.NewForbiddenError("Error to find card")
+		}
+	}
 
-		err = selectCard.Scan(&id, &title, &summary, &dueDate, &cardStatus, &userId)
-		if err != nil {
-			log.Println(err)
-			return Card{}, errors.New(genericErrToUser)
+	var queryToGetCards string
+	switch userRole {
+	case "manager":
+		queryToGetCards = fmt.Sprint("select * from cards where id = %s", cardId)
+	case "technician":
+		queryToGetCards = fmt.Sprint("select * from cards where id = %s and user_id = %s", cardId, userId)
+	}
+
+	selectCards, err := db.Query(queryToGetCards)
+	if err != nil {
+		logger.Error("Error trying to prepare query", err)
+		return nil, rest_err.NewForbiddenError("Error to find card")
+	}
+
+	cards := make(map[int]models.CardDomainInterface)
+
+	for selectCards.Next() {
+		var cardId, userId int
+		var title, summary, cardStatus, dueDate string
+		if err = selectCards.Scan(&cardId, &title, &summary, &dueDate, &cardStatus, &userId); err != nil {
+			logger.Error("Error trying to scan", err)
+			return nil, rest_err.NewForbiddenError("Error to find card")
 		}
 
-		card.Id = id
-		card.Title = title
-		card.Summary = summary
-		card.CardStatus = cardStatus
-		card.DueDate = dueDate
-		card.UserId = userId
+		cards[cardId] = models.NewCardDomain(
+			title,
+			summary,
+			cardStatus,
+			dueDate,
+			userId,
+		)
 	}
 
 	defer db.Close()
-	return card, nil
+
+	return cards, nil
 }

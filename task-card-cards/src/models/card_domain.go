@@ -8,7 +8,7 @@ type CardDomainInterface interface {
 	GetUserId() int
 }
 
-func NewUserDomain(title, summary, dueDate, cardStatus string, userId int) CardDomainInterface {
+func NewCardDomain(title, summary, dueDate, cardStatus string, userId int) CardDomainInterface {
 	return &cardDomain{
 		title: title,
 		summary: summary,

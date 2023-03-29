@@ -1,8 +1,6 @@
 package service
 
 import (
-	"fmt"
-
 	"github.com/luuisavelino/task-card-users/src/configuration/database"
 	"github.com/luuisavelino/task-card-users/src/configuration/logger"
 	"github.com/luuisavelino/task-card-users/src/configuration/rest_err"
@@ -19,10 +17,8 @@ func (u *userDomainService) DeleteUser(id int) *rest_err.RestErr {
 	deleteUserById, err := db.Prepare("DELETE FROM users WHERE id = ?")
 	if err != nil {
 		logger.Error("Error trying to prepare query", err)
-		return rest_err.NewForbiddenError("error to delete values")
+		return rest_err.NewForbiddenError("error when deleting card")
 	}
-
-	fmt.Println(id)
 
 	deleteUserById.Exec(id)
 	defer db.Close()
