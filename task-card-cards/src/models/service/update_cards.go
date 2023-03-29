@@ -1,11 +1,21 @@
-package models
+package service
 
 import (
 	"errors"
 	"log"
 
 	"github.com/luuisavelino/task-card-cards/src/configuration/database"
+	"github.com/luuisavelino/task-card-cards/src/configuration/rest_err"
+	"github.com/luuisavelino/task-card-cards/src/models"
 )
+
+func (c *cardDomainService) UpdateCardInfo(cardId int, cardDomain models.CardDomainInterface) *rest_err.RestErr {
+	return nil
+}
+
+func (c *cardDomainService) MoveCard(cardId int, cardDomain models.CardDomainInterface) *rest_err.RestErr {
+	return nil
+}
 
 func UpdateCardInfo(card Card) error {
 	db := database.ConnectsWithDatabase()

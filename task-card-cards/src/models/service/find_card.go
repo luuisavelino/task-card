@@ -1,4 +1,4 @@
-package models
+package service
 
 import (
 	"errors"
@@ -6,6 +6,8 @@ import (
 	"log"
 
 	"github.com/luuisavelino/task-card-cards/src/configuration/database"
+	"github.com/luuisavelino/task-card-cards/src/configuration/rest_err"
+	"github.com/luuisavelino/task-card-cards/src/models"
 )
 
 const (
@@ -19,6 +21,14 @@ type Card struct {
 	DueDate    string `json:"due_date"`
 	CardStatus string `json:"card_status" validate:"nonzero"`
 	UserId     int    `json:"user_id" validate:"nonzero"`
+}
+
+func (c *cardDomainService) FindCards() (map[int]models.CardDomainInterface, *rest_err.RestErr) {
+	return nil, nil
+}
+
+func (c *cardDomainService) FindCardById(cardId int) (map[int]models.CardDomainInterface, *rest_err.RestErr) {
+	return nil, nil
 }
 
 func GetCards(cardId int) ([]Card, error) {

@@ -1,4 +1,4 @@
-package models
+package service
 
 import (
 	"errors"
@@ -6,7 +6,12 @@ import (
 	"log"
 
 	"github.com/luuisavelino/task-card-cards/src/configuration/database"
+	"github.com/luuisavelino/task-card-cards/src/configuration/rest_err"
 )
+
+func (c *cardDomainService) DeleteCard(cardId int) *rest_err.RestErr {
+	return nil
+}
 
 func DeleteCard(cardId, userId int) error {
 	db := database.ConnectsWithDatabase()

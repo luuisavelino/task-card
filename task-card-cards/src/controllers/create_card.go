@@ -1,11 +1,13 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/luuisavelino/task-card-cards/globals"
+
+	"github.com/luuisavelino/task-card-cards/src/configuration/logger"
+	"github.com/luuisavelino/task-card-cards/src/configuration/rest_success"
+	"github.com/luuisavelino/task-card-cards/src/configuration/validation"
 	"github.com/luuisavelino/task-card-cards/src/controllers/model/request"
 )
 
@@ -29,14 +31,11 @@ func CreateCard(c *gin.Context) {
 	var cardRequest request.CardRequest
 
 	if err := c.ShouldBind(&cardRequest); err != nil {
-		resterr := globals.NewBadRequestError(
-			fmt.Sprint("there are some incrorrect filds, error=" + err.Error()),
-		)
+		logger.Error("Error trying to validate card info", err)
+		resterr := validation.ValidateUserError(err)
 		c.JSON(http.StatusBadRequest, resterr)
 		return
 	}
-
-	fmt.Println(cardRequest)
 
 	// if err := helpers.ValidateCard(cardRequest); err != nil {
 	// 	c.JSON(http.StatusBadRequest, globals.BaseRequestReturn{
@@ -52,7 +51,7 @@ func CreateCard(c *gin.Context) {
 	// 	return
 	// }
 
-	c.JSON(http.StatusOK, globals.BaseRequestReturn{
+	c.JSON(http.StatusOK, rest_success.BaseRequestReturn{
 		Status: "success", Message: "card created",
 	})
 }
