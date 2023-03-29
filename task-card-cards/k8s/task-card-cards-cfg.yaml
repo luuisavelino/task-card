@@ -9,7 +9,7 @@ data:
   DB_HOST: "192.168.0.113"
   DB_PORT: "3306"
   DB_DATABASE: "task_cards"
-  server: "kafka:29092"
+  server: "192.168.0.113:9092"
   topicConsume: "update"
   groupId: "myGroup"
   autoOffSetReset: "earliest"

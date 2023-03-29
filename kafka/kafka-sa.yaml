@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: task-card-kafka
-  namespace: task-card
-  labels:
-    account: kafka

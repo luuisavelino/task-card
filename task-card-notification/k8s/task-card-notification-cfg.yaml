@@ -4,7 +4,7 @@ metadata:
   name: task-card-notification-cfg
   namespace: task-card
 data:
-  server: "kafka:29092"
+  server: "192.168.0.113:9092"
   topicConsume: "update"
   groupId: "myGroup"
   autoOffSetReset: "earliest"
