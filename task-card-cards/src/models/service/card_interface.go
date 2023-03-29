@@ -21,4 +21,6 @@ type CardDomainService interface {
 
 	CreateCard(models.CardDomainInterface) *rest_err.RestErr
 	DeleteCard(int, models.ActionDomainInterface) *rest_err.RestErr
+
+	SendNotification(int, string)
 }

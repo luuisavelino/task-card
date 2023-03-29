@@ -115,7 +115,6 @@ func (c *cardDomainService) FindCardById(cardId int, actionDomain models.ActionD
 		)
 	}
 
-
 	defer db.Close()
 
 	return cards, nil

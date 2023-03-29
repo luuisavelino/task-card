@@ -62,7 +62,7 @@ func (cc *cardControllerInterface) MoveCard(c *gin.Context) {
 		"MoveCard controller executed successfully",
 		zap.String("journey", "moveCard"))
 
-	// Send Notification
+	cc.service.SendNotification(cardId, "update")
 
 	c.JSON(http.StatusOK, rest_success.BaseRequestReturn{
 		Status: "success", Message: "card updated",
