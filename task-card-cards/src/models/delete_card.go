@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/luuisavelino/task-card-cards/pkg/database"
+	"github.com/luuisavelino/task-card-cards/src/configuration/database"
 )
 
 func DeleteCard(cardId, userId int) error {

@@ -9,7 +9,7 @@ import (
 	"os"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
-	"github.com/luuisavelino/task-card-cards/pkg/database"
+	"github.com/luuisavelino/task-card-cards/src/configuration/database"
 )
 
 var server = os.Getenv("server")
@@ -28,7 +28,7 @@ func SendNotification(id int, event string) {
 		log.Fatalln("error getting card information")
 		return
 	}
-	
+
 	var cardNotification CardNotification
 	cardNotification.Infos(card)
 
@@ -61,8 +61,6 @@ func (c *CardNotification) Infos(card Card) {
 	}
 	c.ManagersEmail = managerEmail
 }
-
-
 
 func getManagersEmail() (map[string]string, error) {
 	db := database.ConnectsWithDatabase()

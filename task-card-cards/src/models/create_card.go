@@ -4,7 +4,7 @@ import (
 	"errors"
 	"log"
 
-	"github.com/luuisavelino/task-card-cards/pkg/database"
+	"github.com/luuisavelino/task-card-cards/src/configuration/database"
 )
 
 func CreateNewCard(card Card) error {

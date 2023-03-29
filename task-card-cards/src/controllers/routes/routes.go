@@ -2,9 +2,9 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/luuisavelino/task-card-cards/pkg/controllers"
 
 	docs "github.com/luuisavelino/task-card-cards/docs"
+	"github.com/luuisavelino/task-card-cards/src/controllers"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )

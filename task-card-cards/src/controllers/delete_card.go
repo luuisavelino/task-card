@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/luuisavelino/task-card-cards/globals"
-	"github.com/luuisavelino/task-card-cards/pkg/models"
+	"github.com/luuisavelino/task-card-cards/src/models"
 )
 
 // @BasePath /api/v1
