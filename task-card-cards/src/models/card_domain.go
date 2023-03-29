@@ -10,11 +10,11 @@ type CardDomainInterface interface {
 
 func NewCardDomain(title, summary, dueDate, cardStatus string, userId int) CardDomainInterface {
 	return &cardDomain{
-		title: title,
-		summary: summary,
+		title:      title,
+		summary:    summary,
 		dueDate:    dueDate,
-		cardStatus:   cardStatus,
-		userId: userId,
+		cardStatus: cardStatus,
+		userId:     userId,
 	}
 }
 

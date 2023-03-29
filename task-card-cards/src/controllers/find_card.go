@@ -2,9 +2,13 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/luuisavelino/task-card-cards/src/configuration/logger"
+	"github.com/luuisavelino/task-card-cards/src/configuration/validation"
+	"github.com/luuisavelino/task-card-cards/src/controllers/model/request"
+	"github.com/luuisavelino/task-card-cards/src/models"
 	"github.com/luuisavelino/task-card-cards/src/view"
 	"go.uber.org/zap"
 )
@@ -31,19 +35,22 @@ func (cc *cardControllerInterface) FindCards(c *gin.Context) {
 		zap.String("journey", "findCards"),
 	)
 
-	userId := 10
-	// c.Request.ParseMultipartForm(1000)
-	// userId, err := strconv.Atoi(c.Request.PostForm["user_id"][0])
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, rest_success.BaseRequestReturn{
-	// 		Status: "error", Message: invalidUserId,
-	// 	})
-	// 	return
-	// }
+	var actionRequest request.ActionRequest
 
-	domain, err := cc.service.FindCards(userId)
+	if errValidate := c.ShouldBind(&actionRequest); errValidate != nil {
+		logger.Error("Error trying to validate card info", errValidate)
+		resterr := validation.ValidateUserError(errValidate)
+		c.JSON(http.StatusBadRequest, resterr)
+		return
+	}
+
+	actionDomain := models.NewActionDomain(
+		actionRequest.UserId,
+	)
+
+	domain, err := cc.service.FindCards(actionDomain)
 	if err != nil {
-		logger.Error("Error when trying to find users", err)
+		logger.Error("Error when trying to find user", err)
 		c.JSON(err.Code, err)
 		return
 	}
@@ -72,26 +79,28 @@ func (cc *cardControllerInterface) FindCardById(c *gin.Context) {
 		zap.String("journey", "findCardById"),
 	)
 
-	cardId := 10
-	// cardId, err := strconv.Atoi(c.Params.ByName("id"))
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, rest_success.BaseRequestReturn{
-	// 		Status: "error", Message: invalidId,
-	// 	})
-	// 	return
-	// }
+	cardId, errValidate := strconv.Atoi(c.Params.ByName("id"))
+	if errValidate != nil {
+		logger.Error("Error trying to move card id", errValidate)
+		resterr := validation.ValidateUserError(errValidate)
+		c.JSON(http.StatusBadRequest, resterr)
+		return
+	}
 
-	userId := 10
-	// c.Request.ParseMultipartForm(1000)
-	// userId, err := strconv.Atoi(c.Request.PostForm["user_id"][0])
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, rest_success.BaseRequestReturn{
-	// 		Status: "error", Message: invalidUserId,
-	// 	})
-	// 	return
-	// }
+	var actionRequest request.ActionRequest
 
-	domain, err := cc.service.FindCardById(cardId, userId)
+	if errValidate := c.ShouldBind(&actionRequest); errValidate != nil {
+		logger.Error("Error trying to validate card info", errValidate)
+		resterr := validation.ValidateUserError(errValidate)
+		c.JSON(http.StatusBadRequest, resterr)
+		return
+	}
+
+	actionDomain := models.NewActionDomain(
+		actionRequest.UserId,
+	)
+
+	domain, err := cc.service.FindCardById(cardId, actionDomain)
 	if err != nil {
 		logger.Error("Error when trying to find user", err)
 		c.JSON(err.Code, err)

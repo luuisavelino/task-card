@@ -7,3 +7,7 @@ type CardRequest struct {
 	CardStatus string `json:"card_status" biding:"required"`
 	UserId     int    `json:"user_id" biding:"required"`
 }
+
+type ActionRequest struct {
+	UserId     int    `json:"user_id" biding:"required"`
+}

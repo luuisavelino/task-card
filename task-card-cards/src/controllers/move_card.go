@@ -8,6 +8,8 @@ import (
 	"github.com/luuisavelino/task-card-cards/src/configuration/logger"
 	"github.com/luuisavelino/task-card-cards/src/configuration/rest_success"
 	"github.com/luuisavelino/task-card-cards/src/configuration/validation"
+	"github.com/luuisavelino/task-card-cards/src/controllers/model/request"
+	"github.com/luuisavelino/task-card-cards/src/models"
 	"go.uber.org/zap"
 )
 
@@ -37,7 +39,20 @@ func (cc *cardControllerInterface) MoveCard(c *gin.Context) {
 		return
 	}
 
-	if err := cc.service.MoveCard(cardId); err != nil {
+	var actionRequest request.ActionRequest
+
+	if err := c.ShouldBind(&actionRequest); err != nil {
+		logger.Error("Error trying to validate card info", err)
+		resterr := validation.ValidateUserError(err)
+		c.JSON(http.StatusBadRequest, resterr)
+		return
+	}
+
+	actionDomain := models.NewActionDomain(
+		actionRequest.UserId,
+	)
+
+	if err := cc.service.MoveCard(cardId, actionDomain); err != nil {
 		logger.Error("Error when trying to move card", err)
 		c.JSON(err.Code, err)
 		return

@@ -15,14 +15,32 @@ func (c *cardDomainService) UpdateCardInfo(cardId int, cardDomain models.CardDom
 
 	db := database.ConnectsWithDatabase()
 
-	updateCard, err := db.Prepare("Update cards set title=?, summary=?, due_date=? where id=?")
-
+	isManager, err := manager(db, cardDomain.GetUserId())
 	if err != nil {
 		logger.Error("Error trying to prepare query", err)
-		return rest_err.NewForbiddenError("error to update card")
+		return rest_err.NewForbiddenError("Error when deleting card")
 	}
 
-	updateCard.Exec(cardDomain.GetTitle(), cardDomain.GetSummary(), cardDomain.GetDueDate(), cardId)
-	defer db.Close()
-	return nil
+	isCardOwner, err := cardOwner(db, cardId, cardDomain.GetUserId())
+	if err != nil {
+		logger.Error("Error trying to prepare query", err)
+		return rest_err.NewForbiddenError("Error when deleting card")
+	}
+
+	if isManager || isCardOwner {
+
+		updateCard, err := db.Prepare("Update cards set title=?, summary=?, due_date=? where id=?")
+
+		if err != nil {
+			logger.Error("Error trying to prepare query", err)
+			return rest_err.NewForbiddenError("error to update card")
+		}
+
+		updateCard.Exec(cardDomain.GetTitle(), cardDomain.GetSummary(), cardDomain.GetDueDate(), cardId)
+		defer db.Close()
+		return nil
+	}
+
+	logger.Error("No permission to delete card", err)
+	return rest_err.NewForbiddenError("No permission to delete card")
 }

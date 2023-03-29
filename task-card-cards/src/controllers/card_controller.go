@@ -6,7 +6,7 @@ import (
 )
 
 type cardControllerInterface struct {
-	service service.CardDomainService
+	service  service.CardDomainService
 }
 
 type CardControllerInterface interface {

@@ -8,6 +8,8 @@ import (
 	"github.com/luuisavelino/task-card-cards/src/configuration/logger"
 	"github.com/luuisavelino/task-card-cards/src/configuration/rest_success"
 	"github.com/luuisavelino/task-card-cards/src/configuration/validation"
+	"github.com/luuisavelino/task-card-cards/src/controllers/model/request"
+	"github.com/luuisavelino/task-card-cards/src/models"
 	"go.uber.org/zap"
 )
 
@@ -37,17 +39,20 @@ func (cc *cardControllerInterface) DeleteCard(c *gin.Context) {
 		return
 	}
 
-	userId := 10
-	// c.Request.ParseMultipartForm(1000)
-	// userId, err := strconv.Atoi(c.Request.PostForm["user_id"][0])
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, rest_success.BaseRequestReturn{
-	// 		Status: "error", Message: invalidUserId,
-	// 	})
-	// 	return
-	// }
+	var actionRequest request.ActionRequest
 
-	if err := cc.service.DeleteCard(cardId, userId); err != nil {
+	if err := c.ShouldBind(&actionRequest); err != nil {
+		logger.Error("Error trying to validate card info", err)
+		resterr := validation.ValidateUserError(err)
+		c.JSON(http.StatusBadRequest, resterr)
+		return
+	}
+
+	actionDomain := models.NewActionDomain(
+		actionRequest.UserId,
+	)
+
+	if err := cc.service.DeleteCard(cardId, actionDomain); err != nil {
 		logger.Error("Error when trying to delete card", err)
 		c.JSON(err.Code, err)
 		return

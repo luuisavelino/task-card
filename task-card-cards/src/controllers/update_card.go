@@ -52,7 +52,7 @@ func (cc *cardControllerInterface) UpdateCard(c *gin.Context) {
 		return
 	}
 
-	domain := models.NewCardDomain(
+	cardDomain := models.NewCardDomain(
 		cardRequest.Title,
 		cardRequest.Summary,
 		cardRequest.DueDate,
@@ -60,7 +60,7 @@ func (cc *cardControllerInterface) UpdateCard(c *gin.Context) {
 		cardRequest.UserId,
 	)
 
-	if err := cc.service.UpdateCardInfo(cardId, domain); err != nil {
+	if err := cc.service.UpdateCardInfo(cardId, cardDomain); err != nil {
 		logger.Error("Error when trying to update card", err)
 		c.JSON(err.Code, err)
 		return
