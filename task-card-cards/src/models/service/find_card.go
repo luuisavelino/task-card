@@ -58,8 +58,8 @@ func (c *cardDomainService) FindCards(actionDomain models.ActionDomainInterface)
 		cards[cardId] = models.NewCardDomain(
 			title,
 			summary,
-			cardStatus,
 			dueDate,
+			cardStatus,
 			userId,
 		)
 	}
@@ -109,11 +109,12 @@ func (c *cardDomainService) FindCardById(cardId int, actionDomain models.ActionD
 		cards[cardId] = models.NewCardDomain(
 			title,
 			summary,
-			cardStatus,
 			dueDate,
+			cardStatus,
 			userId,
 		)
 	}
+
 
 	defer db.Close()
 

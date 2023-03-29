@@ -36,3 +36,20 @@ func cardOwner(db *sql.DB, cardId, userId int) (bool, error) {
 
 	return isCardOwner, nil
 }
+
+func getCardStatus(db *sql.DB, cardId int) (string, error) {
+	//
+
+	executeGetCardStatus, err := db.Query(fmt.Sprintf("select card_status from cards where id = %v", cardId))
+	if err != nil {
+		logger.Error("Error trying to prepare query", err)
+		return "", err
+	}
+
+	var cardStatus string
+	for executeGetCardStatus.Next() {
+		executeGetCardStatus.Scan(&cardStatus)
+	}
+
+	return cardStatus, nil
+}

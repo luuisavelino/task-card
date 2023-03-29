@@ -11,7 +11,7 @@ func NewActionDomain(userId int) ActionDomainInterface {
 }
 
 type actionDomain struct {
-	userId     int
+	userId int
 }
 
 func (a *actionDomain) GetUserId() int {

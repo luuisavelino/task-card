@@ -14,20 +14,31 @@ func (c *cardDomainService) MoveCard(cardId int, actionDomain models.ActionDomai
 	)
 
 	db := database.ConnectsWithDatabase()
+	status, err := getCardStatus(db, cardId)
+	if err != nil {
+		logger.Error("Error trying to prepare query", err)
+		return rest_err.NewForbiddenError("Error when moving card")
+	}
 
-	// Get atual Status
-	// Move to next Status
+	switch status {
+	case "to do":
+		status = "in progress"
+	case "in progress":
+		status = "done"
+	case "done":
+		status = "to do"
+	}
 
 	isManager, err := manager(db, actionDomain.GetUserId())
 	if err != nil {
 		logger.Error("Error trying to prepare query", err)
-		return rest_err.NewForbiddenError("Error when deleting card")
+		return rest_err.NewForbiddenError("Error when moving card")
 	}
 
 	isCardOwner, err := cardOwner(db, cardId, actionDomain.GetUserId())
 	if err != nil {
 		logger.Error("Error trying to prepare query", err)
-		return rest_err.NewForbiddenError("Error when deleting card")
+		return rest_err.NewForbiddenError("Error when moving card")
 	}
 
 	if isManager || isCardOwner {
@@ -37,11 +48,11 @@ func (c *cardDomainService) MoveCard(cardId int, actionDomain models.ActionDomai
 			return rest_err.NewForbiddenError("error to move card")
 		}
 
-		updateCard.Exec("to do", cardId)
+		updateCard.Exec(status, cardId)
 		defer db.Close()
 		return nil
 	}
 
 	logger.Error("No permission to delete card", err)
-	return rest_err.NewForbiddenError("No permission to delete card")
+	return rest_err.NewForbiddenError("No permission to move card")
 }

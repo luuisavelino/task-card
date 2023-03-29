@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -43,8 +42,6 @@ func (cc *cardControllerInterface) CreateCard(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, resterr)
 		return
 	}
-
-	fmt.Println(cardRequest)
 
 	domain := models.NewCardDomain(
 		cardRequest.Title,
