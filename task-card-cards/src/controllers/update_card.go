@@ -2,9 +2,15 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/luuisavelino/task-card-cards/src/configuration/logger"
 	"github.com/luuisavelino/task-card-cards/src/configuration/rest_success"
+	"github.com/luuisavelino/task-card-cards/src/configuration/validation"
+	"github.com/luuisavelino/task-card-cards/src/controllers/model/request"
+	"github.com/luuisavelino/task-card-cards/src/models"
+	"go.uber.org/zap"
 )
 
 // @BasePath /api/v1
@@ -24,84 +30,47 @@ import (
 // @Success 200 {object} rest_success.BaseRequestReturn
 // @Failure 400 {object} rest_success.BaseRequestReturn
 // @Router /cards/{id} [patch]
-func UpdateCard(c *gin.Context) {
-	// id, err := strconv.Atoi(c.Params.ByName("id"))
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, rest_success.BaseRequestReturn{
-	// 		Status: "error", Message: invalidId,
-	// 	})
-	// 	return
-	// }
+func (cc *cardControllerInterface) UpdateCard(c *gin.Context) {
+	logger.Info("Init UpdateCard controller",
+		zap.String("journey", "updateCard"),
+	)
 
-	// var card models.Card
+	cardId, err := strconv.Atoi(c.Params.ByName("id"))
+	if err != nil {
+		logger.Error("Error trying to get card id", err)
+		resterr := validation.ValidateUserError(err)
+		c.JSON(http.StatusBadRequest, resterr)
+		return
+	}
 
-	// c.Request.ParseMultipartForm(1000)
-	// for key, value := range c.Request.PostForm {
-	// 	switch key {
-	// 	case "title":
-	// 		card.Title = value[0]
-	// 	case "summary":
-	// 		card.Summary = value[0]
-	// 	case "due_date":
-	// 		card.DueDate = value[0]
-	// 	case "card_status":
-	// 		card.CardStatus = value[0]
-	// 	case "user_id":
-	// 		userId, err := strconv.Atoi(c.Request.PostForm["user_id"][0])
-	// 		if err != nil {
-	// 			c.JSON(http.StatusBadRequest, rest_success.BaseRequestReturn{
-	// 				Status: "error", Message: invalidUserId,
-	// 			})
-	// 			return
-	// 		}
-	// 		card.UserId = userId
-	// 	}
-	// }
+	var cardRequest request.CardRequest
 
-	// card.Id = id
-	// models.UpdateCardInfo(card)
+	if err := c.ShouldBind(&cardRequest); err != nil {
+		logger.Error("Error trying to validate card info", err)
+		resterr := validation.ValidateUserError(err)
+		c.JSON(http.StatusBadRequest, resterr)
+		return
+	}
+
+	domain := models.NewCardDomain(
+		cardRequest.Title,
+		cardRequest.Summary,
+		cardRequest.DueDate,
+		cardRequest.CardStatus,
+		cardRequest.UserId,
+	)
+
+	if err := cc.service.UpdateCardInfo(cardId, domain); err != nil {
+		logger.Error("Error when trying to update card", err)
+		c.JSON(err.Code, err)
+		return
+	}
+
+	logger.Info(
+		"UpdateCard controller executed successfully",
+		zap.String("journey", "updateCard"))
+
 	c.JSON(http.StatusOK, rest_success.BaseRequestReturn{
 		Status: "success", Message: "card updated",
 	})
-}
-
-// @BasePath /api/v1
-
-// MoveCard godoc
-// @Summary Move a card
-// @Description Move a card
-// @Tags cards
-// @Accept  json
-// @Produce  json
-// @Param id path int true "Card id"
-// @Param card_status formData string true "Status of the card"
-// @Success 200 {object} rest_success.BaseRequestReturn
-// @Failure 400 {object} rest_success.BaseRequestReturn
-// @Router /cards/{id} [put]
-func MoveCard(c *gin.Context) {
-	// id, err := strconv.Atoi(c.Params.ByName("id"))
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, rest_success.BaseRequestReturn{
-	// 		Status: "error", Message: invalidId,
-	// 	})
-	// 	return
-	// }
-
-	// var card models.Card
-	// c.Request.ParseMultipartForm(1000)
-	// for key, value := range c.Request.PostForm {
-	// 	switch key {
-	// 	case "card_status":
-	// 		card.CardStatus = value[0]
-	// 	}
-	// }
-
-	// card.Id = id
-
-	// models.UpdateCardStatus(card)
-	// models.SendNotification(id, "update")
-
-	// c.JSON(http.StatusOK, rest_success.BaseRequestReturn{
-	// 	Status: "success", Message: "card moved to" + card.CardStatus,
-	// })
 }

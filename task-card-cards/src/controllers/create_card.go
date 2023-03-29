@@ -4,11 +4,13 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 
 	"github.com/luuisavelino/task-card-cards/src/configuration/logger"
 	"github.com/luuisavelino/task-card-cards/src/configuration/rest_success"
 	"github.com/luuisavelino/task-card-cards/src/configuration/validation"
 	"github.com/luuisavelino/task-card-cards/src/controllers/model/request"
+	"github.com/luuisavelino/task-card-cards/src/models"
 )
 
 // @BasePath /api/v1
@@ -27,7 +29,11 @@ import (
 // @Success 200 {object} globals.BaseRequestReturn
 // @Failure 400 {object} globals.BaseRequestReturn
 // @Router /cards [post]
-func CreateCard(c *gin.Context) {
+func (cc *cardControllerInterface) CreateCard(c *gin.Context) {
+	logger.Info("Init CreateCard controller",
+		zap.String("journey", "createCard"),
+	)
+
 	var cardRequest request.CardRequest
 
 	if err := c.ShouldBind(&cardRequest); err != nil {
@@ -37,19 +43,23 @@ func CreateCard(c *gin.Context) {
 		return
 	}
 
-	// if err := helpers.ValidateCard(cardRequest); err != nil {
-	// 	c.JSON(http.StatusBadRequest, globals.BaseRequestReturn{
-	// 		Status: "error", Message: err.Error(),
-	// 	})
-	// 	return
-	// }
+	domain := models.NewCardDomain(
+		cardRequest.Title,
+		cardRequest.Summary,
+		cardRequest.DueDate,
+		cardRequest.CardStatus,
+		cardRequest.UserId,
+	)
 
-	// if err := models.CreateNewCard(cardRequest); err != nil {
-	// 	c.JSON(http.StatusBadRequest, globals.BaseRequestReturn{
-	// 		Status: "error", Message: err.Error(),
-	// 	})
-	// 	return
-	// }
+	if err := cc.service.CreateCard(domain); err != nil {
+		logger.Error("Error when trying to create card", err)
+		c.JSON(err.Code, err)
+		return
+	}
+
+	logger.Info(
+		"CreateCard controller executed successfully",
+		zap.String("journey", "createCard"))
 
 	c.JSON(http.StatusOK, rest_success.BaseRequestReturn{
 		Status: "success", Message: "card created",
