@@ -1,13 +1,5 @@
 version: '3'
 services:
-  goapp:
-    build: .
-    volumes:
-      - .:/go/app
-    platform: linux/amd64
-    extra_hosts:
-      - "host.docker.internal:172.17.0.1"
-
   mysql:
     image: mysql:5.7
     container_name: mysql-container

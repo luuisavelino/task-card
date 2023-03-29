@@ -20,5 +20,5 @@ func InitRoutes(r *gin.RouterGroup, userController controllers.UserControllerInt
 	r.PUT(apiVersion+"/users/:id", userController.UpdateUser)
 	r.DELETE(apiVersion+"/users/:id", userController.DeleteUser)
 
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.GET("/users/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }

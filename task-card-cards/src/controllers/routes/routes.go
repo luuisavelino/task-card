@@ -21,5 +21,5 @@ func InitRoutes(r *gin.RouterGroup, cardController controllers.CardControllerInt
 	r.DELETE(apiVersion+"/cards/:id", cardController.DeleteCard)
 	r.POST(apiVersion+"/cards/:id", cardController.MoveCard)
 
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.GET("/cards/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }

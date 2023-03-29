@@ -14,20 +14,20 @@ import (
 	"go.uber.org/zap"
 )
 
-// @BasePath /api/v1
+//	@BasePath	/api/v1
 
 // UpdateCard godoc
-// @Summary Update a card
-// @Description Update a card
-// @Tags cards
-// @Accept  json
-// @Produce  json
-// @Param id path int true "Card id"
-// @Param card body request.CardRequest true "Card info"
-// @Success 200 {object} rest_success.BaseRequestReturn
-// @Failure 400 {object} rest_err.RestErr
-// @Failure 500 {object} rest_err.RestErr
-// @Router /cards/{id} [put]
+//	@Summary		Update a card
+//	@Description	Update a card
+//	@Tags			cards
+//	@Accept			json
+//	@Produce		json
+//	@Param			id		path		int					true	"Card id"
+//	@Param			card	body		request.CardRequest	true	"Card info"
+//	@Success		200		{object}	rest_success.BaseRequestReturn
+//	@Failure		400		{object}	rest_err.RestErr
+//	@Failure		500		{object}	rest_err.RestErr
+//	@Router			/cards/{id} [put]
 func (cc *cardControllerInterface) UpdateCard(c *gin.Context) {
 	logger.Info("Init UpdateCard controller",
 		zap.String("journey", "updateCard"),

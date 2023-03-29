@@ -14,18 +14,18 @@ import (
 	"go.uber.org/zap"
 )
 
-// @BasePath /api/v1
+//	@BasePath	/api/v1
 
 // FindCards godoc
-// @Summary Get all cards
-// @Description Get all cards
-// @Tags cards
-// @Accept  json
-// @Produce  json
-// @Param action body request.ActionRequest true "Action info"
-// @Success 200 {object} []response.CardResponse
-// @Failure 400 {object} rest_err.RestErr
-// @Router /cards [get]
+//	@Summary		Get all cards
+//	@Description	Get all cards
+//	@Tags			cards
+//	@Accept			json
+//	@Produce		json
+//	@Param			action	body		request.ActionRequest	true	"Action info"
+//	@Success		200		{object}	[]response.CardResponse
+//	@Failure		400		{object}	rest_err.RestErr
+//	@Router			/cards [get]
 func (cc *cardControllerInterface) FindCards(c *gin.Context) {
 	logger.Info("Init FindCards controller",
 		zap.String("journey", "findCards"),
@@ -58,19 +58,19 @@ func (cc *cardControllerInterface) FindCards(c *gin.Context) {
 	c.JSON(http.StatusOK, view.ConvertDomainToResponse(domain))
 }
 
-// @BasePath /api/v1
+//	@BasePath	/api/v1
 
 // FindCardById godoc
-// @Summary Get a card
-// @Description Get a card
-// @Tags cards
-// @Accept  json
-// @Produce  json
-// @Param id path int true "Card id"
-// @Param action body request.ActionRequest true "Action info"
-// @Success 200 {object} []response.CardResponse
-// @Failure 400 {object} rest_err.RestErr
-// @Router /cards/{id} [get]
+//	@Summary		Get a card
+//	@Description	Get a card
+//	@Tags			cards
+//	@Accept			json
+//	@Produce		json
+//	@Param			id		path		int						true	"Card id"
+//	@Param			action	body		request.ActionRequest	true	"Action info"
+//	@Success		200		{object}	[]response.CardResponse
+//	@Failure		400		{object}	rest_err.RestErr
+//	@Router			/cards/{id} [get]
 func (cc *cardControllerInterface) FindCardById(c *gin.Context) {
 	logger.Info("Init FindCardById controller",
 		zap.String("journey", "findCardById"),

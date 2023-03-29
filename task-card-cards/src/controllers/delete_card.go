@@ -14,20 +14,20 @@ import (
 	"go.uber.org/zap"
 )
 
-// @BasePath /api/v1
+//	@BasePath	/api/v1
 
 // DeleteCard godoc
-// @Summary Delete a card
-// @Description Delete a card
-// @Tags cards
-// @Accept  json
-// @Produce  json
-// @Param id path int true "Card id"
-// @Param action body request.ActionRequest true "Action info"
-// @Success 200 {object} rest_success.BaseRequestReturn
-// @Failure 400 {object} rest_err.RestErr
-// @Failure 500 {object} rest_err.RestErr
-// @Router /cards/{id} [delete]
+//	@Summary		Delete a card
+//	@Description	Delete a card
+//	@Tags			cards
+//	@Accept			json
+//	@Produce		json
+//	@Param			id		path		int						true	"Card id"
+//	@Param			action	body		request.ActionRequest	true	"Action info"
+//	@Success		200		{object}	rest_success.BaseRequestReturn
+//	@Failure		400		{object}	rest_err.RestErr
+//	@Failure		500		{object}	rest_err.RestErr
+//	@Router			/cards/{id} [delete]
 func (cc *cardControllerInterface) DeleteCard(c *gin.Context) {
 	logger.Info("Init DeleteCard controller",
 		zap.String("journey", "deleteCard"),

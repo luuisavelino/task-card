@@ -14,20 +14,20 @@ import (
 	"go.uber.org/zap"
 )
 
-// @BasePath /api/v1
+//	@BasePath	/api/v1
 
 // MoveCard godoc
-// @Summary Move a card
-// @Description Move a card
-// @Tags cards
-// @Accept  json
-// @Produce  json
-// @Param id path int true "Card id"
-// @Param action body request.ActionRequest true "Action info"
-// @Success 200 {object} rest_success.BaseRequestReturn
-// @Failure 400 {object} rest_err.RestErr
-// @Failure 500 {object} rest_err.RestErr
-// @Router /cards/{id} [post]
+//	@Summary		Move a card
+//	@Description	Move a card
+//	@Tags			cards
+//	@Accept			json
+//	@Produce		json
+//	@Param			id		path		int						true	"Card id"
+//	@Param			action	body		request.ActionRequest	true	"Action info"
+//	@Success		200		{object}	rest_success.BaseRequestReturn
+//	@Failure		400		{object}	rest_err.RestErr
+//	@Failure		500		{object}	rest_err.RestErr
+//	@Router			/cards/{id} [post]
 func (cc *cardControllerInterface) MoveCard(c *gin.Context) {
 	logger.Info("Init MoveCard controller",
 		zap.String("journey", "moveCard"),
