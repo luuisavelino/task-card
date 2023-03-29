@@ -9,7 +9,7 @@ import (
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
 	en_translation "github.com/go-playground/validator/v10/translations/en"
-	"github.com/luuisavelino/task-card-users/src/configuration/rest_err"
+	"github.com/luuisavelino/task-card-cards/src/configuration/rest_err"
 )
 
 var (
