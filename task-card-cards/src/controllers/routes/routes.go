@@ -17,7 +17,7 @@ func InitRoutes(r *gin.RouterGroup, cardController controllers.CardControllerInt
 	r.GET(apiVersion+"/cards", cardController.FindCards)
 	r.GET(apiVersion+"/cards/:id", cardController.FindCardById)
 	r.POST(apiVersion+"/cards", cardController.CreateCard)
-	r.PATCH(apiVersion+"/cards/:id", cardController.UpdateCard)
+	r.PUT(apiVersion+"/cards/:id", cardController.UpdateCard)
 	r.DELETE(apiVersion+"/cards/:id", cardController.DeleteCard)
 	r.POST(apiVersion+"/cards/:id", cardController.MoveCard)
 

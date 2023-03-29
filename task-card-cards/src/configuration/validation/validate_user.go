@@ -26,7 +26,7 @@ func init() {
 	}
 }
 
-func ValidateUserError(validation_err error) *rest_err.RestErr {
+func ValidateCardError(validation_err error) *rest_err.RestErr {
 	var jsonErr *json.UnmarshalTypeError
 	var jsonValidationError validator.ValidationErrors
 

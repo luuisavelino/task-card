@@ -13,11 +13,6 @@ import (
 	"go.uber.org/zap"
 )
 
-const (
-	invalidId     = "invalid id"
-	invalidUserId = "invalid user id"
-)
-
 // @BasePath /api/v1
 
 // Cards godoc
@@ -37,9 +32,9 @@ func (cc *cardControllerInterface) FindCards(c *gin.Context) {
 
 	var actionRequest request.ActionRequest
 
-	if errValidate := c.ShouldBind(&actionRequest); errValidate != nil {
+	if errValidate := c.ShouldBindJSON(&actionRequest); errValidate != nil {
 		logger.Error("Error trying to validate card info", errValidate)
-		resterr := validation.ValidateUserError(errValidate)
+		resterr := validation.ValidateCardError(errValidate)
 		c.JSON(http.StatusBadRequest, resterr)
 		return
 	}
@@ -82,16 +77,16 @@ func (cc *cardControllerInterface) FindCardById(c *gin.Context) {
 	cardId, errValidate := strconv.Atoi(c.Params.ByName("id"))
 	if errValidate != nil {
 		logger.Error("Error trying to move card id", errValidate)
-		resterr := validation.ValidateUserError(errValidate)
+		resterr := validation.ValidateCardError(errValidate)
 		c.JSON(http.StatusBadRequest, resterr)
 		return
 	}
 
 	var actionRequest request.ActionRequest
 
-	if errValidate := c.ShouldBind(&actionRequest); errValidate != nil {
+	if errValidate := c.ShouldBindJSON(&actionRequest); errValidate != nil {
 		logger.Error("Error trying to validate card info", errValidate)
-		resterr := validation.ValidateUserError(errValidate)
+		resterr := validation.ValidateCardError(errValidate)
 		c.JSON(http.StatusBadRequest, resterr)
 		return
 	}

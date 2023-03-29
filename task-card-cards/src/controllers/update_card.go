@@ -38,16 +38,16 @@ func (cc *cardControllerInterface) UpdateCard(c *gin.Context) {
 	cardId, err := strconv.Atoi(c.Params.ByName("id"))
 	if err != nil {
 		logger.Error("Error trying to get card id", err)
-		resterr := validation.ValidateUserError(err)
+		resterr := validation.ValidateCardError(err)
 		c.JSON(http.StatusBadRequest, resterr)
 		return
 	}
 
 	var cardRequest request.CardRequest
 
-	if err := c.ShouldBind(&cardRequest); err != nil {
+	if err := c.ShouldBindJSON(&cardRequest); err != nil {
 		logger.Error("Error trying to validate card info", err)
-		resterr := validation.ValidateUserError(err)
+		resterr := validation.ValidateCardError(err)
 		c.JSON(http.StatusBadRequest, resterr)
 		return
 	}

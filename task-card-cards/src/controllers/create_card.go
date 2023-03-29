@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -36,12 +37,14 @@ func (cc *cardControllerInterface) CreateCard(c *gin.Context) {
 
 	var cardRequest request.CardRequest
 
-	if err := c.ShouldBind(&cardRequest); err != nil {
+	if err := c.ShouldBindJSON(&cardRequest); err != nil {
 		logger.Error("Error trying to validate card info", err)
-		resterr := validation.ValidateUserError(err)
+		resterr := validation.ValidateCardError(err)
 		c.JSON(http.StatusBadRequest, resterr)
 		return
 	}
+
+	fmt.Println(cardRequest)
 
 	domain := models.NewCardDomain(
 		cardRequest.Title,

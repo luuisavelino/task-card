@@ -34,16 +34,16 @@ func (cc *cardControllerInterface) MoveCard(c *gin.Context) {
 	cardId, err := strconv.Atoi(c.Params.ByName("id"))
 	if err != nil {
 		logger.Error("Error trying to move card id", err)
-		resterr := validation.ValidateUserError(err)
+		resterr := validation.ValidateCardError(err)
 		c.JSON(http.StatusBadRequest, resterr)
 		return
 	}
 
 	var actionRequest request.ActionRequest
 
-	if err := c.ShouldBind(&actionRequest); err != nil {
+	if err := c.ShouldBindJSON(&actionRequest); err != nil {
 		logger.Error("Error trying to validate card info", err)
-		resterr := validation.ValidateUserError(err)
+		resterr := validation.ValidateCardError(err)
 		c.JSON(http.StatusBadRequest, resterr)
 		return
 	}
