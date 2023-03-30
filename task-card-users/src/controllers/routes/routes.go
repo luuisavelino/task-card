@@ -2,17 +2,17 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-
 	docs "github.com/luuisavelino/task-card-users/docs"
+
 	"github.com/luuisavelino/task-card-users/src/controllers"
-	swaggerFiles "github.com/swaggo/files"
+	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 const apiVersion = "/api/v1"
 
 func InitRoutes(r *gin.RouterGroup, userController controllers.UserControllerInterface) {
-	docs.SwaggerInfo.BasePath = apiVersion
+	docs.SwaggerInfo.BasePath = "/"
 
 	r.GET(apiVersion+"/users", userController.FindUsers)
 	r.GET(apiVersion+"/users/:id", userController.FindUserById)
@@ -20,5 +20,5 @@ func InitRoutes(r *gin.RouterGroup, userController controllers.UserControllerInt
 	r.PUT(apiVersion+"/users/:id", userController.UpdateUser)
 	r.DELETE(apiVersion+"/users/:id", userController.DeleteUser)
 
-	r.GET("/users/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.GET(apiVersion + "/users/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 }

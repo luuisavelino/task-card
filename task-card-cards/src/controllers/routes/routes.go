@@ -12,7 +12,7 @@ import (
 const apiVersion = "/api/v1"
 
 func InitRoutes(r *gin.RouterGroup, cardController controllers.CardControllerInterface) {
-	docs.SwaggerInfo.BasePath = apiVersion
+	docs.SwaggerInfo.BasePath = "/"
 
 	r.GET(apiVersion+"/cards", cardController.FindCards)
 	r.GET(apiVersion+"/cards/:id", cardController.FindCardById)
@@ -21,5 +21,5 @@ func InitRoutes(r *gin.RouterGroup, cardController controllers.CardControllerInt
 	r.DELETE(apiVersion+"/cards/:id", cardController.DeleteCard)
 	r.POST(apiVersion+"/cards/:id", cardController.MoveCard)
 
-	r.GET("/cards/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.GET(apiVersion+"/cards/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
